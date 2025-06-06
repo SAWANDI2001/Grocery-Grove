@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 function ProductList() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editProduct, setEditProduct] = useState(null);
+
   const [products, setProduct] = useState([]);
   const [newProduct, setNewProduct] = useState({
     name: "",
@@ -10,19 +13,39 @@ function ProductList() {
     image: "",
   });
 
-  const UpdateClicked = (product) => {
-    // console.log("updateClicked", product);
-    const id = product._id;
-    fetch(`http://localhost:5000/api/products/${id}`, {
-      method: "PUT", // or PATCH
+  const openUpdateModal = (product) => {
+    setEditProduct({ ...product }); // clone product data
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setEditProduct(null);
+  };
+
+  const handleUpdateChange = (e) => {
+    const { name, value } = e.target;
+    setEditProduct((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const submitUpdatedProduct = () => {
+    if (!editProduct || !editProduct._id) return;
+
+    fetch(`http://localhost:5000/api/products/${editProduct._id}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(product),
+      body: JSON.stringify(editProduct),
     })
       .then((res) => res.json())
       .then((data) => {
         console.log("Product updated:", data);
+        fetchProducts();
+        closeModal();
       })
       .catch((err) => console.error(err));
   };
@@ -140,7 +163,13 @@ function ProductList() {
                       </label>
                     </td>
                     <td>
-                      <button onClick={() => UpdateClicked(product)}>
+                      {/* <button onClick={() => UpdateClicked(product)}>
+                        Update
+                      </button> */}
+                      <button
+                        onClick={() => openUpdateModal(product)}
+                        className="text-blue-600 underline"
+                      >
                         Update
                       </button>
                     </td>
@@ -151,6 +180,63 @@ function ProductList() {
           </div>
         </div>
       </div>
+
+      {/* update modal */}
+      {isModalOpen && editProduct && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-md w-full max-w-md">
+            <h2 className="text-xl font-semibold mb-4">Update Product</h2>
+
+            <input
+              type="text"
+              name="name"
+              value={editProduct.name}
+              onChange={handleUpdateChange}
+              placeholder="Product Name"
+              className="w-full mb-3 px-4 py-2 border rounded"
+            />
+            <input
+              type="text"
+              name="category"
+              value={editProduct.category}
+              onChange={handleUpdateChange}
+              placeholder="Category"
+              className="w-full mb-3 px-4 py-2 border rounded"
+            />
+            <input
+              type="number"
+              name="price"
+              value={editProduct.price}
+              onChange={handleUpdateChange}
+              placeholder="Price"
+              className="w-full mb-3 px-4 py-2 border rounded"
+            />
+            <input
+              type="text"
+              name="image"
+              value={editProduct.image}
+              onChange={handleUpdateChange}
+              placeholder="Image URL"
+              className="w-full mb-3 px-4 py-2 border rounded"
+            />
+
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={closeModal}
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={submitUpdatedProduct}
+                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
