@@ -11,7 +11,7 @@ function ProductList() {
   });
 
   const UpdateClicked = (product) => {
-    console.log("updateClicked", product);
+    // console.log("updateClicked", product);
     const id = product._id;
     fetch(`http://localhost:5000/api/products/${id}`, {
       method: "PUT", // or PATCH
