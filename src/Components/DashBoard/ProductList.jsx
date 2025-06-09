@@ -8,7 +8,7 @@ function ProductList() {
   const [newProduct, setNewProduct] = useState({
     name: "",
     category: "",
-    Price: "",
+    price: "",
     inStock: false,
     image: "",
   });
@@ -75,7 +75,7 @@ function ProductList() {
         setNewProduct({
           name: "",
           category: "",
-          Price: "",
+          price: "",
           inStock: false,
           image: "",
         });
@@ -84,6 +84,7 @@ function ProductList() {
   };
 
   // Delete product
+
   const handleDelete = (id) => {
     fetch(`http://localhost:5000/api/products/${id}`, {
       method: "DELETE",
@@ -103,20 +104,37 @@ function ProductList() {
     },
   ];
 
+  //Instock button
+  const toggleInStock = (prod) => {
+    const updated = { ...prod, inStock: !prod.inStock };
+
+    console.log("Toggling checkbox for:", prod.name); 
+    console.log(
+      "Previous inStock:",
+      prod.inStock,
+      "| New inStock:",
+      updated.inStock
+    ); 
+
+    fetch(`http://localhost:5000/api/products/${prod._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updated),
+    })
+      .then((res) => res.json())
+      .then(() => {
+        setProduct((prev) =>
+          prev.map((p) => (p._id === prod._id ? updated : p))
+        );
+      })
+      .catch((err) => console.error("inStock update error:", err));
+  };
+
   return (
     <div>
       <div className="flex-1 py-10 flex flex-col justify-between">
         <div className="w-full md:p-10 p-4">
           <h2 className="pb-4 text-2xl font-semibold">All Products</h2>
-
-          <div className="w-100 h-20 bg-amber-100">
-            <button
-              className="flex items-center justify-between w-44 px-4 py-2 border border-green-500 rounded text-green-600 font-semibold focus:outline-none"
-              type="button"
-            >
-              Add Product
-            </button>
-          </div>
 
           <div className="flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-gray-500/20">
             <table className="md:table-auto table-fixed w-full overflow-hidden">
@@ -147,30 +165,46 @@ function ProductList() {
                         {product.name}
                       </span>
                     </td>
+
                     <td className="px-4 py-3">{product.category}</td>
                     <td className="px-4 py-3 max-sm:hidden">
                       Rs.{product.price}
                     </td>
+
                     <td className="px-4 py-3">
                       <label className="relative inline-flex items-center cursor-pointer text-gray-900 gap-3">
                         <input
                           type="checkbox"
                           className="sr-only peer"
                           defaultChecked={product.inStock}
+                          onChange={() => {
+                            console.log("Checkbox clicked for:", product.name);
+                            toggleInStock(product);
+                          }}
                         />
                         <div className="w-12 h-7 bg-slate-300 rounded-full peer peer-checked:bg-green-600 transition-colors duration-200"></div>
                         <span className="dot absolute left-1 top-1 w-5 h-5 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-5"></span>
                       </label>
                     </td>
+
                     <td>
                       {/* <button onClick={() => UpdateClicked(product)}>
                         Update
                       </button> */}
                       <button
                         onClick={() => openUpdateModal(product)}
-                        className="text-blue-600 underline"
+                        className="w-[60px] bg-green-700 text-white font-semibold py-1 rounded hover:bg-green-800 transition duration-200 ml-[50px] mt-1 "
                       >
                         Update
+                      </button>
+                    </td>
+
+                    <td>
+                      <button
+                        onClick={() => handleDelete(product._id)}
+                        className="w-[60px] bg-green-700 text-white font-semibold py-1 rounded hover:bg-green-800 transition duration-200 ml-[50px] mt-1 "
+                      >
+                        Delete
                       </button>
                     </td>
                   </tr>

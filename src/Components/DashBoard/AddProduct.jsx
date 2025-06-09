@@ -204,7 +204,7 @@ function AddProduct() {
           placeholder="Enter Product Name"
           value={formData.name}
           onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
         />
 
         <input
@@ -213,22 +213,22 @@ function AddProduct() {
           placeholder="Enter Product Description"
           value={formData.description}
           onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
         />
 
         <select
           name="category"
           value={formData.category}
           onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
         >
           <option value="">Select Category</option>
           {[
             { name: "Vegetable" },
-            { name: "Fruit" },
+            { name: "Fruits" },
             { name: "Baby Products" },
             { name: "Dairy" },
-            { name: "Bevarages" },
+            { name: "Bevarage" },
             { name: "Snacks and Confection" },
           ].map((item, index) => (
             <option key={index} value={item.name}>
@@ -243,12 +243,12 @@ function AddProduct() {
           placeholder="Enter Product Price"
           value={formData.price}
           onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
         />
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-200"
+          className="w-full bg-green-500 font-bold text-white py-2 rounded-lg hover:bg-green-600 transition duration-200"
         >
           Submit
         </button>

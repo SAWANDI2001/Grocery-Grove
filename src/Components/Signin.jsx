@@ -12,33 +12,34 @@ function Signin() {
   const togglePassword = () => {
     setShowPassword(!showPassword);
 
-     const handleSubmit = async (e) => {
-    e.preventDefault();
-
-
-    // API request
-    try {
-      const response = await fetch('http://localhost:5000/api/userLogin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessage(`${data.message}`);
-        // Optionally redirect here: e.g. navigate('/dashboard');
-      } else {
-        setMessage(` ${data.message}`);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      setMessage(' Something went wrong. Try again!');
-    }
-  }
-
   };
+
+  const handleSubmit = (e) => {
+      console.log('signin clicked');
+    // e.preventDefault();
+
+
+    // // API request
+    // try {
+    //   const response = await fetch('http://localhost:5000/api/users/login', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ email, password }),
+    //   });
+
+    //   const data = await response.json();
+
+    //   if (response.ok) {
+    //     setMessage(`${data.message}`);
+    //     // Optionally redirect here: e.g. navigate('/dashboard');
+    //   } else {
+    //     setMessage(` ${data.message}`);
+    //   }
+    // } catch (error) {
+    //   console.error('Error:', error);
+    //   setMessage(' Something went wrong. Try again!');
+    // }
+  }
 
   return (
     <div>
@@ -46,7 +47,7 @@ function Signin() {
         <p className="text-2xl font-bold mt-5 text-center">Login</p>
 
         <div className="w-[400px] h-[300px] bg-gray-100 ml-[550px] mt-5">
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="mb-2 ml-[50px]">
               <label className="block text-gray-700">Email</label>
               <input

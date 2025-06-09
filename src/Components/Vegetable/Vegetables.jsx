@@ -18,7 +18,7 @@ function Vegetables() {
   const [selected, setSelected] = useState("Default");
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/products?category=Vegetables") // replace with your server URL
+    fetch("http://localhost:5000/api/products?category=Vegetable&inStock=true") // replace with your server URL
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.error(err));
